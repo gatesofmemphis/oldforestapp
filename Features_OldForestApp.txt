@@ -9,6 +9,7 @@
 * interface for admins to update information in database.
 * easter egg for the late Don Richardson, the long time leader of Old Forest hikes.
 * about tab/page.
+* trail map drawing or google maps.
 * possibly build to allow adding extra features as available -- mycological studies, bird studies, snake studies, etc.
 
 
