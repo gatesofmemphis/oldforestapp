@@ -12,6 +12,7 @@ $(document).ready(function() {
       maxZoom: 20,
       minZoom: 15
     }).setView([35.147203, -89.989724], 15);
+    L.control.locate().addTo(overtonParkMap);
     // L.mapbox.styleLayer('mapbox://styles/mapbox/emerald-v8').addTo(overtonParkMap);
     var overtonParkPlantLayer = L.mapbox.featureLayer();
 
