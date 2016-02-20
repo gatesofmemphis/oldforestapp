@@ -1,2 +1,20 @@
-body { margin:0; padding:0; }
-#map { position:absolute; top:0; bottom:0; width:100%; }
+body {
+    margin:0;
+    padding:0;
+    background:#404040;
+    color:#f8f8f8;
+    font:500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+    -webkit-font-smoothing:antialiased;
+}
+#map { position:absolute; top:0; bottom:50px; width:100%; }
+#footer { position:absolute; height:50px; bottom:0px; width:100%; }
+#footer h3 { text-align: center; }
+
+.my-icon {
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+}
