@@ -123,4 +123,85 @@ $(document).ready(function() {
     overtonParkPlantLayer.addTo(overtonParkMap);
     fetch_naturalist_data();
     // overtonParkPlantLayer.on('click', function(e) { console.log(e.layer.feature.properties); });
+    
+    var page_size = 10;
+    var page = 1;
+    
+    var catalogList = $('#catalog-list');
+    
+    var loadMoreLi = $('<li>');
+    loadMoreLi.addClass('load-more');
+    loadMoreLi.addClass('ul-li-static');
+    
+    loadMoreLi.css('text-align', 'center');
+    loadMoreLi.css('padding', '20px');
+    loadMoreLi.css('background-color', '#333');
+    loadMoreLi.css('color', '#FFF')
+    
+    var loadMoreP = $('<p>');
+    loadMoreP.css('font-size', '18px');
+    loadMoreP.html('Load More');
+    loadMoreP.appendTo(loadMoreLi);
+    
+    loadMoreLi.appendTo(catalogList);
+    
+    $('.load-more').click(function() {
+        loadPage();
+    })
+    
+    function loadPage() {
+        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
+        url += '&page=' + page;
+        $.ajax(url, {
+            success: function(data) {
+                var catalogData = data['listed_taxa']
+                $.each(catalogData, function(idx, val) {
+                    if (val['last_observation_id'] != null) {
+                        var li = $('<li>');
+                        li.addClass('ui-li-has-thumb');
+                        $('.load-more').before(li);
+                        
+                        var link = $('<a>');
+                        link.addClass('ui-btn ui-btn-icon-right ui-icon-location');
+                        
+                        var thumb = $('<img>');
+                        thumb.attr('src', val['taxon']['photo_url']);
+                        thumb.appendTo(link);
+                        
+                        var default_name = $('<h3>');
+                        default_name.html(val['taxon']['default_name']['name']);
+                        default_name.appendTo(link);
+                        
+                        var taxon_name = $('<p>');
+                        taxon_name.html(val['taxon']['name']);
+                        taxon_name.css('font-style', 'italic');
+                        taxon_name.appendTo(link);
+                        
+                        link.appendTo(li);
+                    } else {
+                        var li = $('<li>');
+                        li.addClass('ui-li-has-thumb ui-li-static');
+                        $('.load-more').before(li);
+                        
+                        var thumb = $('<img>');
+                        thumb.attr('src', val['taxon']['photo_url']);
+                        thumb.appendTo(li);
+                        
+                        var default_name = $('<h3>');
+                        default_name.html(val['taxon']['default_name']['name']);
+                        default_name.appendTo(li);
+                        
+                        var taxon_name = $('<p>');
+                        taxon_name.html(val['taxon']['name']);
+                        taxon_name.css('font-style', 'italic');
+                        taxon_name.appendTo(li);
+                    }
+                });
+                console.log(catalogData[0]);
+                page += 1;
+            }
+        });
+    }
+    
+    loadPage();
 });
