@@ -1,7 +1,17 @@
 $(document).ready(function() {
 
     L.mapbox.accessToken = 'pk.eyJ1IjoiZG91Z2xhc2FzdGFybmVzIiwiYSI6IkxfZ1ZxN1kifQ.ycBd3UWFRS08zAJJfxGkPw';
-    var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike').setView([35.147203, -89.989724], 15);
+    // Construct a bounding box for this map that the user cannot
+    // move out of
+    var southWest = L.latLng(35.142358, -89.996579),
+    northEast = L.latLng(35.150951, -89.981602),
+    bounds = L.latLngBounds(southWest, northEast);
+
+    var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike', {
+      maxBounds: bounds,
+      maxZoom: 20,
+      minZoom: 15
+    }).setView([35.147203, -89.989724], 15);
     // L.mapbox.styleLayer('mapbox://styles/mapbox/emerald-v8').addTo(overtonParkMap);
     var overtonParkPlantLayer = L.mapbox.featureLayer();
 
