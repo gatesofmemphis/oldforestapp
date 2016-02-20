@@ -30,6 +30,11 @@ $(document).ready(function() {
         // Fetch the data from iNaturalist and populate our feature layer.
         console.log("Processing naturalist data...");
         features = [];
+        var marker_config = {
+          "marker-color": "#3DFF59",
+          "marker-size": "medium",
+          "marker-symbol": "garden"
+        };
         $.each(data, function(i, point) {
           var lat = point.latitude;
           var lng = point.longitude;
@@ -38,7 +43,7 @@ $(document).ready(function() {
           };
           var feature = {
             type: 'Feature',
-            properties: point,
+            properties: _.extend(point, marker_config),
             geometry: {
               type: 'Point',
               coordinates: [
@@ -69,7 +74,10 @@ $(document).ready(function() {
           if (prop.photos.length > 0) {
             popup += '<br /><img src="' + prop.photos[0].square_url + '" />';
           }
+          popup += '<br /><a href="' + prop.uri + '" target="_blank"><small>More info</small></a>';
 
+          // The following is taken from the example found at:
+          // https://www.mapbox.com/help/building-a-store-locator/
           // var listing = listings.appendChild(document.createElement('div'));
           // listing.className = 'item';
 
