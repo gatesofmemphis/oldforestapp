@@ -2,13 +2,10 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.min.css" type="text/css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.structure.min.css" type="text/css">
         <link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
         <link rel="stylesheet" href="style.css">
         <!-- Utility -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
         <script src="https://cdn.jsdelivr.net/lodash/4.5.0/lodash.min.js"></script>
         <!-- Mapbox.js -->
         <script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
@@ -51,7 +48,7 @@
             <div class="tab-pane active" id="map_tab"><div id="map"></div></div>
             <div class="tab-pane" id="catalog_tab">
               <div id="catalog-content">
-                <ul data-role="listview" class="ui-listview" id="catalog-list"></ul>
+                <ul class="list-group" id="catalog-list"></ul>
               </div>
             </div>
             <div class="tab-pane" id="about_tab"><h3>about content and link to pdf</h3></div>

@@ -24,3 +24,27 @@ body {
     min-width:15px;
     width:32.5%;
 }
+
+.catalog-list-thumbnail, .catalog-list-content {
+  float: left;
+}
+
+.catalog-list-content {
+  padding: 0px 5px 0px 5px;
+  vertical-align: middle;
+}
+
+.catalog-list-icon {
+  float: right;
+}
+
+.catalog-list-icon > span {
+  font-size: 34px;
+  padding: 20px 10px 10px 10px;
+}
+
+#catalog-content {
+    overflow: auto;
+}
+
+

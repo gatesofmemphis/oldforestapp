@@ -124,14 +124,15 @@ $(document).ready(function() {
     fetch_naturalist_data();
     // overtonParkPlantLayer.on('click', function(e) { console.log(e.layer.feature.properties); });
     
-    var page_size = 10;
+        var page_size = 10;
     var page = 1;
     
     var catalogList = $('#catalog-list');
     
+    
+    
     var loadMoreLi = $('<li>');
     loadMoreLi.addClass('load-more');
-    loadMoreLi.addClass('ul-li-static');
     
     loadMoreLi.css('text-align', 'center');
     loadMoreLi.css('padding', '20px');
@@ -156,46 +157,51 @@ $(document).ready(function() {
             success: function(data) {
                 var catalogData = data['listed_taxa']
                 $.each(catalogData, function(idx, val) {
+                    var li = $('<li>');
+                    var containerDiv = $('<div>');
+                    var thumbnail = $('<div>');
+                    var content = $('<div>');
+                    var icon = $('<div>');
+                    
+                    li.addClass('list-group-item');
+                    content.addClass('catalog-list-content');
+                    icon.addClass('catalog-list-icon');
+                    thumbnail.addClass('catalog-list-thumbnail');
+                    
+                    var thumbnailImg = $('<img>');
+                    thumbnailImg.attr('src', val['taxon']['photo_url']);
+                    
+                    thumbnailImg.appendTo(thumbnail);
+                    
+                    var default_name = $('<h4>');
+                    default_name.html(val['taxon']['default_name']['name']);
+                    
+                    var taxon_name = $('<p>');
+                    taxon_name.html(val['taxon']['name']);
+                    taxon_name.css('font-style', 'italic');
+                    
+                    default_name.appendTo(content);
+                    taxon_name.appendTo(content);
+                    
+                    thumbnail.appendTo(containerDiv);
+                    content.appendTo(containerDiv);
+                    icon.appendTo(containerDiv);
+                    
+                    var span = $('<span>');
+                    span.addClass('glyphicon glyphicon-map-marker');
+                    
                     if (val['last_observation_id'] != null) {
-                        var li = $('<li>');
-                        li.addClass('ui-li-has-thumb');
-                        $('.load-more').before(li);
-                        
-                        var link = $('<a>');
-                        link.addClass('ui-btn ui-btn-icon-right ui-icon-location');
-                        
-                        var thumb = $('<img>');
-                        thumb.attr('src', val['taxon']['photo_url']);
-                        thumb.appendTo(link);
-                        
-                        var default_name = $('<h3>');
-                        default_name.html(val['taxon']['default_name']['name']);
-                        default_name.appendTo(link);
-                        
-                        var taxon_name = $('<p>');
-                        taxon_name.html(val['taxon']['name']);
-                        taxon_name.css('font-style', 'italic');
-                        taxon_name.appendTo(link);
-                        
-                        link.appendTo(li);
-                    } else {
-                        var li = $('<li>');
-                        li.addClass('ui-li-has-thumb ui-li-static');
-                        $('.load-more').before(li);
-                        
-                        var thumb = $('<img>');
-                        thumb.attr('src', val['taxon']['photo_url']);
-                        thumb.appendTo(li);
-                        
-                        var default_name = $('<h3>');
-                        default_name.html(val['taxon']['default_name']['name']);
-                        default_name.appendTo(li);
-                        
-                        var taxon_name = $('<p>');
-                        taxon_name.html(val['taxon']['name']);
-                        taxon_name.css('font-style', 'italic');
-                        taxon_name.appendTo(li);
+                      span.appendTo(icon);
                     }
+                    
+                    var clearDiv = $('<div>');
+                    clearDiv.css('clear', 'both');
+                    
+                    clearDiv.appendTo(containerDiv);
+                    
+                    containerDiv.appendTo(li);
+                    
+                    $('.load-more').before(li);
                 });
                 console.log(catalogData[0]);
                 page += 1;
