@@ -3,9 +3,24 @@ body {
     padding:0;
     background:#404040;
     color:#f8f8f8;
+    width:100%:
     font:500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
     -webkit-font-smoothing:antialiased;
 }
-#map { position:absolute; top:0; bottom:50px; width:100%; }
-#footer { position:absolute; height:50px; bottom:0px; width:100%; }
-#footer h3 { text-align: center; }
+#nav_div { position:absolute; bottom:0px; height: 45px; width: 100%;}
+#map { position:absolute; top:0px; bottom:45px; width:100%; }
+/*#footer { position:absolute; height:50px; bottom:0px; width:100%; }*/
+/*#footer h3 { text-align: center; }*/
+
+.glyphicon {
+    font-size: 20px;
+}
+
+li > a {
+    text-align: center;
+}
+li {
+    margin:0px;
+    min-width:15px;
+    width:32.5%;
+}
