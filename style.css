@@ -38,6 +38,9 @@ body {
   float: right;
 }
 
+#about-content {
+  text-align: center;
+}
 .catalog-list-icon > span {
   font-size: 34px;
   padding: 20px 10px 10px 10px;
@@ -47,4 +50,6 @@ body {
     overflow: auto;
 }
 
-
+#app-link {
+  padding: 20px;
+}

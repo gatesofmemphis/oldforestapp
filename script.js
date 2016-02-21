@@ -209,5 +209,23 @@ $(document).ready(function() {
         });
     }
     
+    function getINaturalistLink() {
+      var text = 'To contribute to the data in the catalog, please install iNaturalist.<br/><br/>';
+      var userAgent = navigator.userAgent;
+      if (userAgent.indexOf('iPhone') > 0) {
+        return text + '<a href="https://geo.itunes.apple.com/us/app/inaturalist/id421397028?mt=8" style="display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:165px;height:40px;"></a>';
+      } else if (userAgent.indexOf('Android') > 0) {
+        return text + '<a href="http://play.google.com/store/apps/details?id=org.inaturalist.android"><img src="images/android.png" style="width:135px;height:40px;"></a>';
+      } else {
+        return 'no app';
+      }
+    }
+    
     loadPage();
+    
+    $('#app-link').html(getINaturalistLink());
 });
+
+
+
+
