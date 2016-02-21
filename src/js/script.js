@@ -108,7 +108,9 @@ $(document).ready(function() {
                 $('.load-more').html('Load more');
                 $('.load-more').find('img').remove();
                 var catalogData = data['listed_taxa'];
-                $.each(catalogData, function(idx, val) {
+                // Sorts catalog data by default_name
+                var sorted_data = _.sortBy(catalogData, function(item) { return item.taxon.default_name.name; });
+                $.each(sorted_data, function(idx, val) {
                     var li = $('<li>');
                     var containerDiv = $('<div>');
                     var thumbnail = $('<div>');
