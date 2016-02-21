@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Old Forest Map App
 
 ## Intro

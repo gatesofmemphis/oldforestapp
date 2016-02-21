@@ -1,0 +1,17 @@
+* listing of all species in scrollable fashion by either official name or common name. Listing will include link to separate tab/page with attributes listed and photo.
+* filtering of listing by family name, common family name, native status, invasive status, type.
+* a separate tab for invasive species although they should be included in the primary listing.
+* allow image recognition to identify plants.
+* geotag rare or invasive species.
+* geotag and submit photos.
+* Old Forest species of the week.
+* download the original PDF by Tom Heineke.
+* interface for admins to update information in database.
+* easter egg for the late Don Richardson, the long time leader of Old Forest hikes.
+* about tab/page.
+* trail map drawing or google maps.
+* possibly build to allow adding extra features as available -- mycological studies, bird studies, snake studies, etc.
+
+
+
+
