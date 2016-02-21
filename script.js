@@ -134,8 +134,8 @@ $(document).ready(function() {
     };
 
     var loadPage = function(query) {
-        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
-        url += '&page=' + page;
+        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126';
+        // url += '&page=' + page;
         if (query) {
           url += "&q="+query;
         }
