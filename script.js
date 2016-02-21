@@ -1,28 +1,9 @@
 $(document).ready(function() {
-
-    L.mapbox.accessToken = 'pk.eyJ1IjoiZG91Z2xhc2FzdGFybmVzIiwiYSI6IkxfZ1ZxN1kifQ.ycBd3UWFRS08zAJJfxGkPw';
-    // Construct a bounding box for this map that the user cannot
-    // move out of
-    var southWest = L.latLng(35.139358, -89.997579),
-    northEast = L.latLng(35.155951, -89.980602),
-    bounds = L.latLngBounds(southWest, northEast);
-
-    var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike', {
-      maxBounds: bounds,
-      maxZoom: 22,
-      minZoom: 15
-    }).setView([35.147203, -89.989724], 15);
-    L.control.locate().addTo(overtonParkMap);
-    // L.mapbox.styleLayer('mapbox://styles/mapbox/emerald-v8').addTo(overtonParkMap);
-    var overtonParkPlantLayer = L.mapbox.featureLayer();
-    observed_species = {};
-
-    var fetch_naturalist_data = function() {
+    var fetch_observation_data = function() {
       var base_url = 'https://www.inaturalist.org/observations.json?swlat=35.142358&swlng=-89.996579&nelat=35.150951&nelng=-89.981602';
-      base_url += '';
       $.ajax(base_url, {
           success: function(data) {
-            process_naturalist_data(data);
+            process_observation_data(data);
             process_popup_info();
           },
           alert: function(err) {
@@ -31,15 +12,10 @@ $(document).ready(function() {
         });
     };
 
-    var process_naturalist_data = function(data) {
+    var process_observation_data = function(data) {
         // Fetch the data from iNaturalist and populate our feature layer.
-        console.log("Processing naturalist data...");
         features = [];
-        var marker_config = {
-          "marker-color": "#3DFF59",
-          "marker-size": "medium",
-          "marker-symbol": "garden"
-        };
+
         $.each(data, function(i, point) {
           var lat = point.latitude;
           var lng = point.longitude;
@@ -68,7 +44,6 @@ $(document).ready(function() {
 
     var process_popup_info = function() {
       // Parse through our features and add popups!
-      console.log("Processing popup info...");
       overtonParkPlantLayer.eachLayer(function (plant) {
         // Shorten locale.feature.properties to just `prop` so we're not
           // writing this long form over and over again.
@@ -95,57 +70,44 @@ $(document).ready(function() {
 
     };
 
-    overtonParkPlantLayer.addTo(overtonParkMap);
-    fetch_naturalist_data();
-    // overtonParkPlantLayer.on('click', function(e) { console.log(e.layer.feature.properties); });
+    var setup_catalog_list = function() {
+      var catalogList = $('#catalog-list');
 
-    var page_size = 10;
-    var page = 1;
+      var loadMoreLi = $('<li>');
+      loadMoreLi.addClass('load-more');
 
-    var catalogList = $('#catalog-list');
+      loadMoreLi.css('text-align', 'center');
+      loadMoreLi.css('padding', '20px');
+      loadMoreLi.css('background-color', '#333');
+      loadMoreLi.css('color', '#FFF');
 
-    var loadMoreLi = $('<li>');
-    loadMoreLi.addClass('load-more');
+      var loadMoreP = $('<p>');
+      loadMoreP.css('font-size', '18px');
+      loadMoreP.html('Load More');
+      loadMoreP.appendTo(loadMoreLi);
 
-    loadMoreLi.css('text-align', 'center');
-    loadMoreLi.css('padding', '20px');
-    loadMoreLi.css('background-color', '#333');
-    loadMoreLi.css('color', '#FFF');
+      loadMoreLi.appendTo(catalogList);
+    };
 
-    var loadMoreP = $('<p>');
-    loadMoreP.css('font-size', '18px');
-    loadMoreP.html('Load More');
-    loadMoreP.appendTo(loadMoreLi);
-
-    loadMoreLi.appendTo(catalogList);
-
-    $('.load-more').click(function() {
-        loadPage();
-    });
 
     var getSpinner = function() {
       var img = $('<img>').attr('src', 'images/ajax-loader.gif');
       return img;
-    }
+    };
 
     var species_url = function(taxon_id) {
         var base_url = 'http://www.inaturalist.org/taxa/';
         return base_url + taxon_id;
     };
 
-    var loadPage = function(query) {
-        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126';
-        // url += '&page=' + page;
-        if (query) {
-          url += "&q="+query;
-        }
+    var loadPage = function(checklist_url) {
         $('.load-more').html('');
         $('.load-more').append(getSpinner());
-        $.ajax(url, {
+        $.ajax(checklist_url, {
             success: function(data) {
                 $('.load-more').html('Load more');
                 $('.load-more').find('img').remove();
-                var catalogData = data['listed_taxa']
+                var catalogData = data['listed_taxa'];
                 $.each(catalogData, function(idx, val) {
                     var li = $('<li>');
                     var containerDiv = $('<div>');
@@ -203,14 +165,12 @@ $(document).ready(function() {
                     $('.load-more').before(li);
                 });
                 var options = {
-                  valueNames: [ 'default_name' ]
+                  valueNames: ['default_name']
                 };
                 var speciesList = new List('catalog-content', options);
-                console.log(catalogData[0]);
-                page += 1;
             }
         });
-    }
+    };
 
     var apply_filter = function(taxon_id) {
       overtonParkPlantLayer.setFilter(function(f) {
@@ -221,7 +181,7 @@ $(document).ready(function() {
       return false;
     };
 
-    function getINaturalistLink() {
+    var getINaturalistLink = function() {
       var text = 'To contribute to the data in the catalog, please install iNaturalist.<br/><br/>';
       var userAgent = navigator.userAgent;
       if (userAgent.indexOf('iPhone') > 0) {
@@ -231,15 +191,12 @@ $(document).ready(function() {
       } else {
         return 'no app';
       }
-    }
-
-    loadPage();
+    };
 
     var refreshPointData = function() {
         apply_filter();
-        fetch_naturalist_data();
+        fetch_observation_data();
     };
-    $('#app-link').html(getINaturalistLink());
 
     L.Control.RefreshPoints = L.Control.extend(
     {
@@ -256,7 +213,6 @@ $(document).ready(function() {
                 .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
             .addListener(controlDiv, 'click', function () {
               refreshPointData();
-              console.log('control div clicked!');
             });
 
             var controlUI = L.DomUtil.create('a', 'leaflet-bar-part leaflet-bar-part-single', controlDiv);
@@ -267,7 +223,46 @@ $(document).ready(function() {
             return controlDiv;
         }
     });
+
+    /**
+     * Main
+     */
+    L.mapbox.accessToken = 'pk.eyJ1IjoiZG91Z2xhc2FzdGFybmVzIiwiYSI6IkxfZ1ZxN1kifQ.ycBd3UWFRS08zAJJfxGkPw';
+    // Construct a bounding box to prevent users from moving outside of Overton Park.
+    var southWest = L.latLng(35.139358, -89.997579),
+    northEast = L.latLng(35.155951, -89.980602),
+    bounds = L.latLngBounds(southWest, northEast);
+
+    // URL that affects the data that displays on the map
+    var observations_url = 'https://www.inaturalist.org/observations.json?swlat=35.142358&swlng=-89.996579&nelat=35.150951&nelng=-89.981602';
+    // URL that affects data displayed in the catalog
+    var checklist_url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126';
+
+    // Properties of the marker. To look up other symbols, search for mapbox maki icons.
+    var marker_config = {
+      "marker-color": "#3DFF59",
+      "marker-size": "medium",
+      "marker-symbol": "garden"
+    };
+
+    var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike', {
+      maxBounds: bounds,
+      maxZoom: 22,
+      minZoom: 15
+    }).setView([35.147203, -89.989724], 15);
+    L.control.locate().addTo(overtonParkMap);
+    // If you want to change to a custom style one day, add this and remove the style
+    // string from the map constructor.
+    // L.mapbox.styleLayer('mapbox://styles/mapbox/emerald-v8').addTo(overtonParkMap);
+    var overtonParkPlantLayer = L.mapbox.featureLayer();
+    var observed_species = {};
+
     var refreshPointsControl = new L.Control.RefreshPoints();
     overtonParkMap.addControl(refreshPointsControl);
+    overtonParkPlantLayer.addTo(overtonParkMap);
 
+    fetch_observation_data(observations_url);
+    setup_catalog_list();
+    loadPage(checklist_url);
+    $('#app-link').html(getINaturalistLink());
 });
