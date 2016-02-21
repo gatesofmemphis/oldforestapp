@@ -227,7 +227,7 @@ $(document).ready(function() {
     /**
      * Main
      */
-    L.mapbox.accessToken = 'pk.eyJ1IjoiZG91Z2xhc2FzdGFybmVzIiwiYSI6IkxfZ1ZxN1kifQ.ycBd3UWFRS08zAJJfxGkPw';
+    L.mapbox.accessToken = 'pk.eyJ1IjoiZ2F0ZXNvZm1lbXBoaXMiLCJhIjoiY2lrd3Zia2V2MDBqMnV5a3N6cml4ZXVteCJ9.ATQ0Sjh-dhm30RcgJoQHJg';
     // Construct a bounding box to prevent users from moving outside of Overton Park.
     var southWest = L.latLng(35.139358, -89.997579),
     northEast = L.latLng(35.155951, -89.980602),
