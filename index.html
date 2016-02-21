@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/darkly/bootstrap.min.css">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="http://listjs.com/no-cdn/list.js"></script>
         <script src="script.js"></script>
     </head>
     <body>
@@ -45,11 +46,15 @@
               </li>
             </ul>
         </div>
+        <!-- Content panes -->
         <div class="tab-content" id="tabcontent">
             <div class="tab-pane active" id="map_tab"><div id="map"></div></div>
             <div class="tab-pane" id="catalog_tab">
               <div id="catalog-content">
-                <ul class="list-group" id="catalog-list"></ul>
+                <input type="text" class="search" id="search_text" placeholder="Search species..."></input>
+                <div id="list_container">
+                    <ul class="list list-group" id="catalog-list"></ul>
+                </div>
               </div>
             </div>
             <div class="tab-pane" id="about_tab">
@@ -59,6 +64,6 @@
               <div id="app-link"></div>
             </div>
         </div>
-        
+
     </body>
 </html>

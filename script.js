@@ -9,7 +9,7 @@ $(document).ready(function() {
 
     var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike', {
       maxBounds: bounds,
-      maxZoom: 20,
+      maxZoom: 22,
       minZoom: 15
     }).setView([35.147203, -89.989724], 15);
     L.control.locate().addTo(overtonParkMap);
@@ -19,11 +19,14 @@ $(document).ready(function() {
 
     var fetch_naturalist_data = function() {
       var base_url = 'https://www.inaturalist.org/observations.json?swlat=35.142358&swlng=-89.996579&nelat=35.150951&nelng=-89.981602';
-      base_url += '&projects=field-guide-to-overton-park-old-forest-memphis-tn';
+      base_url += '';
       $.ajax(base_url, {
           success: function(data) {
             process_naturalist_data(data);
             process_popup_info();
+          },
+          alert: function(err) {
+            alert("Unable to fetch plant data, please try again.");
           }
         });
     };
@@ -80,37 +83,6 @@ $(document).ready(function() {
           popup += '<br /><a class="popup-link" href="' + prop.uri + '" target="_blank">';
           popup += 'More info</a>';
 
-          // The following is taken from the example found at:
-          // https://www.mapbox.com/help/building-a-store-locator/
-          // var listing = listings.appendChild(document.createElement('div'));
-          // listing.className = 'item';
-
-          // var link = listing.appendChild(document.createElement('a'));
-          // link.href = '#';
-          // link.className = 'title';
-
-          // link.innerHTML = prop.address;
-          // if (prop.crossStreet) {
-          //   link.innerHTML += '<br /><small class="quiet">' + prop.crossStreet + '</small>';
-          //   popup += '<br /><small class="quiet">' + prop.crossStreet + '</small>';
-          // }
-          //
-          // var details = listing.appendChild(document.createElement('div'));
-          // details.innerHTML = prop.city;
-          // if (prop.phone) {
-          //   details.innerHTML += ' &middot; ' + prop.phoneFormatted;
-          // }
-          //
-          // link.onclick = function() {
-          //   setActive(listing);
-          //
-          //   // When a menu item is clicked, animate the map to center
-          //   // its associated locale and open its popup.
-          //   map.setView(locale.getLatLng(), 16);
-          //   locale.openPopup();
-          //   return false;
-          // };
-
           // Marker interaction
           plant.on('click', function(e) {
             // 1. center the map on the selected marker.
@@ -149,11 +121,16 @@ $(document).ready(function() {
 
     $('.load-more').click(function() {
         loadPage();
-    })
+    });
 
-    function loadPage() {
-        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
-        url += '&page=' + page;
+    loadPage = function(query) {
+        // iconic_taxon is used to set plants, animals, etc.
+        // var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126&per_page=' + page_size;
+        // url += '&page=' + page;
+        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126';
+        if (query) {
+          url += "&q="+query;
+        }
         $.ajax(url, {
             success: function(data) {
                 var catalogData = data['listed_taxa']
@@ -176,6 +153,7 @@ $(document).ready(function() {
 
                     var default_name = $('<h4>');
                     default_name.html(val['taxon']['default_name']['name']);
+                    default_name.addClass('default_name');
 
                     var taxon_name = $('<p>');
                     taxon_name.html(val['taxon']['name']);
@@ -208,6 +186,10 @@ $(document).ready(function() {
 
                     $('.load-more').before(li);
                 });
+                var options = {
+                  valueNames: [ 'default_name' ]
+                };
+                var speciesList = new List('catalog-content', options);
                 console.log(catalogData[0]);
                 page += 1;
             }
