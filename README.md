@@ -3,6 +3,12 @@
 ## Intro
 The Old Forest map app was created to enhance the user experience as people travelled through the Old Forest. Users can contribute more data through iNaturalist and invasive species can also be filtered through the catalog list in the app.
 
+##Deployment
+* From the root of the repository run `npm install`
+* Run `npm install -g gulp-cli`
+* Run `gulp compile-scripts`
+* The files to deploy are in the `/public` directory
+
 ## App Requirements
 
 ### JS Library dependencies
