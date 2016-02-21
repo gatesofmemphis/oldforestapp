@@ -150,12 +150,21 @@ $(document).ready(function() {
     $('.load-more').click(function() {
         loadPage();
     })
+    
+    function getSpinner() {
+      var img = $('<img>').attr('src', 'images/ajax-loader.gif');
+      return img;
+    }
 
     function loadPage() {
         var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
         url += '&page=' + page;
+        $('.load-more').html('');
+        $('.load-more').append(getSpinner());
         $.ajax(url, {
             success: function(data) {
+                $('.load-more').html('Load more');
+                $('.load-more').find('img').remove();
                 var catalogData = data['listed_taxa']
                 $.each(catalogData, function(idx, val) {
                     var li = $('<li>');
