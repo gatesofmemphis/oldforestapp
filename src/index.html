@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+        <link rel="stylesheet" href="style.css">
+        <!-- Utility -->
+        <script src="js/jquery-1.11.3.js"></script>
+        <script src="js/lodash-4.5.0.js"></script>
+        <!-- Mapbox.js -->
+        <script src='js/mapbox-2.3.0.js'></script>
+        <script src='js/L.Control.Locate-0.43.0.min.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' />
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/darkly/bootstrap.min.css">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="js/bootstrap-3.3.6.js"></script>
+        <script src="js/list.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+    <body>
+        <!-- Nav tabs -->
+        <div id="nav_div">
+            <ul class="nav nav-pills navbar-fixed-bottom"  id="tablist">
+              <li class="active">
+                <a href="#map_tab" id='map_link' data-toggle="pill">
+                  <span class="glyphicon glyphicon-globe"></span>
+                </a>
+              </li>
+              <li>
+                  <a href="#catalog_tab" data-toggle="pill">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#about_tab" data-toggle="pill">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                  </a>
+              </li>
+            </ul>
+        </div>
+        <!-- Content panes -->
+        <div class="tab-content" id="tabcontent">
+            <div class="tab-pane active" id="map_tab"><div id="map"></div></div>
+            <div class="tab-pane" id="catalog_tab">
+              <div id="catalog-content">
+                <input type="text" class="search" id="search_text" placeholder="Search species..."></input>
+                <div id="list_container">
+                    <ul class="list list-group" id="catalog-list"></ul>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="about_tab">
+              <div id="about-content">
+                <h4><a href="https://github.com/gatesofmemphis/oldforestapp/raw/master/OldForestFinalReport.PDF">Download the Old Forest Report</a></h2>
+              </div>
+              <div id="app-link"></div>
+            </div>
+        </div>
+
+    </body>
+</html>
