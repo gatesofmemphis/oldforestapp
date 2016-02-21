@@ -149,14 +149,19 @@ $(document).ready(function() {
 
     $('.load-more').click(function() {
         loadPage();
-    })
-    
-    function getSpinner() {
+    });
+
+    var getSpinner = function() {
       var img = $('<img>').attr('src', 'images/ajax-loader.gif');
       return img;
     }
 
-    function loadPage() {
+    var species_url = function(taxon_id) {
+        var base_url = 'http://www.inaturalist.org/taxa/';
+        return base_url + taxon_id;
+    };
+
+    var loadPage = function() {
         var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
         url += '&page=' + page;
         $('.load-more').html('');
@@ -178,10 +183,14 @@ $(document).ready(function() {
                     icon.addClass('catalog-list-icon');
                     thumbnail.addClass('catalog-list-thumbnail');
 
+                    var thumbnailLink = $('<a>');
+                    thumbnailLink.attr('href', species_url(val['taxon_id']));
+                    thumbnailLink.attr('target', '_blank');
                     var thumbnailImg = $('<img>');
                     thumbnailImg.attr('src', val['taxon']['photo_url']);
 
-                    thumbnailImg.appendTo(thumbnail);
+                    thumbnailImg.appendTo(thumbnailLink);
+                    thumbnailLink.appendTo(thumbnail);
 
                     var default_name = $('<h4>');
                     default_name.html(val['taxon']['default_name']['name']);
