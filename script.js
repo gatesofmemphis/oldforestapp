@@ -123,16 +123,28 @@ $(document).ready(function() {
         loadPage();
     });
 
-    loadPage = function(query) {
-        // iconic_taxon is used to set plants, animals, etc.
-        // var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126&per_page=' + page_size;
-        // url += '&page=' + page;
-        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?iconic_taxon=47126';
+    var getSpinner = function() {
+      var img = $('<img>').attr('src', 'images/ajax-loader.gif');
+      return img;
+    }
+
+    var species_url = function(taxon_id) {
+        var base_url = 'http://www.inaturalist.org/taxa/';
+        return base_url + taxon_id;
+    };
+
+    var loadPage = function(query) {
+        var url = 'https://www.inaturalist.org/check_lists/194500-Overton-Park-Check-List.json?per_page=' + page_size;
+        url += '&page=' + page;
         if (query) {
           url += "&q="+query;
         }
+        $('.load-more').html('');
+        $('.load-more').append(getSpinner());
         $.ajax(url, {
             success: function(data) {
+                $('.load-more').html('Load more');
+                $('.load-more').find('img').remove();
                 var catalogData = data['listed_taxa']
                 $.each(catalogData, function(idx, val) {
                     var li = $('<li>');
@@ -146,10 +158,14 @@ $(document).ready(function() {
                     icon.addClass('catalog-list-icon');
                     thumbnail.addClass('catalog-list-thumbnail');
 
+                    var thumbnailLink = $('<a>');
+                    thumbnailLink.attr('href', species_url(val['taxon_id']));
+                    thumbnailLink.attr('target', '_blank');
                     var thumbnailImg = $('<img>');
                     thumbnailImg.attr('src', val['taxon']['photo_url']);
 
-                    thumbnailImg.appendTo(thumbnail);
+                    thumbnailImg.appendTo(thumbnailLink);
+                    thumbnailLink.appendTo(thumbnail);
 
                     var default_name = $('<h4>');
                     default_name.html(val['taxon']['default_name']['name']);
