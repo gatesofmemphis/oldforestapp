@@ -12,7 +12,7 @@ body {
 /*#footer { position:absolute; height:50px; bottom:0px; width:100%; }*/
 /*#footer h3 { text-align: center; }*/
 
-.glyphicon {
+ul .glyphicon {
     font-size: 20px;
 }
 
@@ -52,4 +52,28 @@ body {
 
 #app-link {
   padding: 20px;
+}
+
+.popup-div {
+    /*position: relative;*/
+    min-height:100px;
+    min-width:100px;
+    text-align:center;
+}
+.popup-title {
+    /*position: absolute;
+    left: 1px;
+    top: 1px;*/
+}
+.popup-image {
+    /*position:absolute;
+    top: 5px;
+    left: 3px;*/
+}
+#popup-icon {
+    /*position:absolute;
+    bottom:2px;
+    right:2px;*/
+    color: black;
+    font-size:20px;
 }
