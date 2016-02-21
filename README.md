@@ -34,7 +34,13 @@ The site is broken up into three files:
   * Users can edit the basemap they see within the app via OSM iD editor.
 * [Bootstrap](http://getbootstrap.com)
   * The appearance of the app is utilizing a bootstrap theme. This theme can be changed.
+* [iNaturalist](http://inaturalist.org/)
+  * Where all the plant information is pulled from.
 
 ## The Future
-* Updating URLs
-  *
+### Updating URLs
+There are two main links to modify:
+  * observations_url
+    * Currently we are pulling **all** observations within the Overton Park area (via geospatial filter).
+  * checklist_url
+    * Currently we are pulling from the Overton Park check list, filtering on plants.
