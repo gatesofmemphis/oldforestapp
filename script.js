@@ -3,8 +3,8 @@ $(document).ready(function() {
     L.mapbox.accessToken = 'pk.eyJ1IjoiZG91Z2xhc2FzdGFybmVzIiwiYSI6IkxfZ1ZxN1kifQ.ycBd3UWFRS08zAJJfxGkPw';
     // Construct a bounding box for this map that the user cannot
     // move out of
-    var southWest = L.latLng(35.141358, -89.997579),
-    northEast = L.latLng(35.151951, -89.980602),
+    var southWest = L.latLng(35.139358, -89.997579),
+    northEast = L.latLng(35.155951, -89.980602),
     bounds = L.latLngBounds(southWest, northEast);
 
     var overtonParkMap = L.mapbox.map('map', 'mapbox.run-bike-hike', {
@@ -72,12 +72,13 @@ $(document).ready(function() {
           var prop = plant.feature.properties;
 
           // Each marker on the map.
-          var popup = '<h3>' + prop.species_guess + '</h3><div>';
+          var popup = '<div class="popup-div"><h3 class="popup-title">' + prop.species_guess + '</h3>';
 
           if (prop.photos.length > 0) {
-            popup += '<br /><img src="' + prop.photos[0].square_url + '" />';
+            popup += '<img class="popup-image" src="' + prop.photos[0].square_url + '" />';
           }
-          popup += '<br /><a href="' + prop.uri + '" target="_blank"><small>More info</small></a>';
+          popup += '<br /><a class="popup-link" href="' + prop.uri + '" target="_blank">';
+          popup += 'More info</a>';
 
           // The following is taken from the example found at:
           // https://www.mapbox.com/help/building-a-store-locator/
@@ -137,7 +138,7 @@ $(document).ready(function() {
     loadMoreLi.css('text-align', 'center');
     loadMoreLi.css('padding', '20px');
     loadMoreLi.css('background-color', '#333');
-    loadMoreLi.css('color', '#FFF')
+    loadMoreLi.css('color', '#FFF');
 
     var loadMoreP = $('<p>');
     loadMoreP.css('font-size', '18px');
@@ -213,9 +214,7 @@ $(document).ready(function() {
         });
     }
 
-    loadPage();
-
-    apply_filter = function(taxon_id) {
+    var apply_filter = function(taxon_id) {
       overtonParkPlantLayer.setFilter(function(f) {
           if (!taxon_id) return true;
           return f.properties.taxon_id === taxon_id;
@@ -223,4 +222,54 @@ $(document).ready(function() {
       process_popup_info();
       return false;
     };
+
+    function getINaturalistLink() {
+      var text = 'To contribute to the data in the catalog, please install iNaturalist.<br/><br/>';
+      var userAgent = navigator.userAgent;
+      if (userAgent.indexOf('iPhone') > 0) {
+        return text + '<a href="https://geo.itunes.apple.com/us/app/inaturalist/id421397028?mt=8" style="display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:165px;height:40px;"></a>';
+      } else if (userAgent.indexOf('Android') > 0) {
+        return text + '<a href="http://play.google.com/store/apps/details?id=org.inaturalist.android"><img src="images/android.png" style="width:135px;height:40px;"></a>';
+      } else {
+        return 'no app';
+      }
+    }
+
+    loadPage();
+
+    var refreshPointData = function() {
+        apply_filter();
+        fetch_naturalist_data();
+    };
+    $('#app-link').html(getINaturalistLink());
+
+    L.Control.RefreshPoints = L.Control.extend(
+    {
+        options:
+        {
+            position: 'topright',
+        },
+        onAdd: function (map) {
+            var controlDiv = L.DomUtil.create('div', 'leaflet-control-locate leaflet-bar leaflet-control');
+            controlDiv.style.paddingRight = '10px';
+            // break here
+            L.DomEvent
+                .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+                .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+            .addListener(controlDiv, 'click', function () {
+              refreshPointData();
+              console.log('control div clicked!');
+            });
+
+            var controlUI = L.DomUtil.create('a', 'leaflet-bar-part leaflet-bar-part-single', controlDiv);
+            controlUI.title = 'Refresh points';
+            controlUI.href = '#';
+            var icon = L.DomUtil.create('span', 'glyphicon glyphicon-refresh', controlUI);
+            icon.style.fontSize = '20px';
+            return controlDiv;
+        }
+    });
+    var refreshPointsControl = new L.Control.RefreshPoints();
+    overtonParkMap.addControl(refreshPointsControl);
+
 });
