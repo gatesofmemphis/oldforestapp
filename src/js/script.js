@@ -152,6 +152,7 @@ $(document).ready(function() {
                       icon.on('click', function() {
                         apply_filter(val.taxon_id);
                         $('#map_link').click();
+                        overtonParkMap.invalidateSize();
                       });
                     }
 
@@ -265,4 +266,9 @@ $(document).ready(function() {
     setup_catalog_list();
     loadPage(checklist_url);
     $('#app-link').html(getINaturalistLink());
+    overtonParkMap.invalidateSize();
+    $('#map_link').on('click', function(){
+      // Bootstrap pane switching causes issues with the map size.
+      overtonParkMap.invalidateSize();
+    });
 });
