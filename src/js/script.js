@@ -100,74 +100,89 @@ $(document).ready(function() {
         return base_url + taxon_id;
     };
 
-    var loadPage = function(checklist_url) {
+    var build_list = function(catalogData) {
+      $('.load-more').html('Load more');
+      $('.load-more').find('img').remove();
+      var sorted_data = _.sortBy(catalogData, function(item) {
+        return item.taxon.default_name.name; });
+      $.each(sorted_data, function(idx, val) {
+          var li = $('<li>');
+          var containerDiv = $('<div>');
+          var thumbnail = $('<div>');
+          var content = $('<div>');
+          var icon = $('<div>');
+
+          li.addClass('list-group-item');
+          content.addClass('catalog-list-content');
+          icon.addClass('catalog-list-icon');
+          thumbnail.addClass('catalog-list-thumbnail');
+
+          var thumbnailLink = $('<a>');
+          thumbnailLink.attr('href', species_url(val['taxon_id']));
+          thumbnailLink.attr('target', '_blank');
+          var thumbnailImg = $('<img>');
+          thumbnailImg.attr('src', val['taxon']['photo_url']);
+
+          thumbnailImg.appendTo(thumbnailLink);
+          thumbnailLink.appendTo(thumbnail);
+
+          var default_name = $('<h4>');
+          default_name.html(val['taxon']['default_name']['name']);
+          default_name.addClass('default_name');
+
+          var taxon_name = $('<p>');
+          taxon_name.html(val['taxon']['name']);
+          taxon_name.css('font-style', 'italic');
+
+          default_name.appendTo(content);
+          taxon_name.appendTo(content);
+
+          thumbnail.appendTo(containerDiv);
+          content.appendTo(containerDiv);
+          icon.appendTo(containerDiv);
+
+          var span = $('<span>');
+          span.addClass('glyphicon glyphicon-map-marker');
+
+          if (val['taxon_id'] in observed_species) {
+            span.appendTo(icon);
+            icon.on('click', function() {
+              apply_filter(val.taxon_id);
+              $('#map_link').click();
+            });
+          }
+
+          var clearDiv = $('<div>');
+          clearDiv.css('clear', 'both');
+
+          clearDiv.appendTo(containerDiv);
+
+          containerDiv.appendTo(li);
+
+          $('.load-more').before(li);
+      });
+    }
+    var catalog_data = [];
+    var loadPage = function(checklist_url, page) {
         $('.load-more').html('');
         $('.load-more').append(getSpinner());
+        if (page) {
+          checklist_url += "&page="+page;
+        }
         $.ajax(checklist_url, {
             success: function(data) {
-                $('.load-more').html('Load more');
-                $('.load-more').find('img').remove();
-                var catalogData = data['listed_taxa'];
-                $.each(catalogData, function(idx, val) {
-                    var li = $('<li>');
-                    var containerDiv = $('<div>');
-                    var thumbnail = $('<div>');
-                    var content = $('<div>');
-                    var icon = $('<div>');
-
-                    li.addClass('list-group-item');
-                    content.addClass('catalog-list-content');
-                    icon.addClass('catalog-list-icon');
-                    thumbnail.addClass('catalog-list-thumbnail');
-
-                    var thumbnailLink = $('<a>');
-                    thumbnailLink.attr('href', species_url(val['taxon_id']));
-                    thumbnailLink.attr('target', '_blank');
-                    var thumbnailImg = $('<img>');
-                    thumbnailImg.attr('src', val['taxon']['photo_url']);
-
-                    thumbnailImg.appendTo(thumbnailLink);
-                    thumbnailLink.appendTo(thumbnail);
-
-                    var default_name = $('<h4>');
-                    default_name.html(val['taxon']['default_name']['name']);
-                    default_name.addClass('default_name');
-
-                    var taxon_name = $('<p>');
-                    taxon_name.html(val['taxon']['name']);
-                    taxon_name.css('font-style', 'italic');
-
-                    default_name.appendTo(content);
-                    taxon_name.appendTo(content);
-
-                    thumbnail.appendTo(containerDiv);
-                    content.appendTo(containerDiv);
-                    icon.appendTo(containerDiv);
-
-                    var span = $('<span>');
-                    span.addClass('glyphicon glyphicon-map-marker');
-
-                    if (val['taxon_id'] in observed_species) {
-                      span.appendTo(icon);
-                      icon.on('click', function() {
-                        apply_filter(val.taxon_id);
-                        $('#map_link').click();
-                      });
-                    }
-
-                    var clearDiv = $('<div>');
-                    clearDiv.css('clear', 'both');
-
-                    clearDiv.appendTo(containerDiv);
-
-                    containerDiv.appendTo(li);
-
-                    $('.load-more').before(li);
-                });
-                var options = {
-                  valueNames: ['default_name']
-                };
-                var speciesList = new List('catalog-content', options);
+                catalog_data = catalog_data.concat(data['listed_taxa']);
+                if (data.current_page && (data.current_page < data.total_pages)) {
+                  loadPage(checklist_url, data.current_page+1);
+                  return;
+                } else {
+                  build_list(catalog_data);
+                  var options = {
+                    valueNames: ['default_name'],
+                    page: 500
+                  };
+                  var speciesList = new List('catalog-content', options);
+                }
             }
         });
     };
@@ -265,4 +280,7 @@ $(document).ready(function() {
     setup_catalog_list();
     loadPage(checklist_url);
     $('#app-link').html(getINaturalistLink());
+    $('#map_link').on('shown.bs.tab', function() {
+      overtonParkMap.invalidateSize();
+    });
 });
